@@ -1,9 +1,10 @@
 # Build portátil para Windows
 
-Este trabalho prepara a distribuição da **v0.1.1**, ainda não publicada. A versão
-interna, o título da janela e os metadados Python usam 0.1.1. A branch
-`codex/windows-portable` aguarda revisão antes de integrar `main`.
-Não altere a tag nem a release v0.1.0 existente.
+Este guia descreve o empacotamento portátil do Renamix para Windows, incluído no
+código a partir da versão 0.1.1. Consulte as
+[releases do projeto](https://github.com/amzsants/renamix/releases) para verificar
+as versões e os downloads disponíveis. O número da versão no código não implica
+que exista um binário publicado para ela.
 
 ## Construir localmente
 
@@ -32,8 +33,8 @@ repositório como dados. Build reproduzível significa repetir o processo com os
 inputs; não se promete igualdade bit a bit entre sistemas/versões diferentes.
 O ambiente de build precisa conseguir inicializar Tcl/Tk; importar `tkinter` sozinho
 não comprova isso. Confira com `python -c "import tkinter; tkinter.Tcl()"` usando
-o mesmo interpretador do build. Nesta preparação, o isolamento do terminal bloqueou
-o acesso aos scripts Tcl; o build foi repetido fora desse isolamento, sem modificar
+o mesmo interpretador do build. No build local registrado abaixo, o isolamento do
+terminal bloqueou o acesso aos scripts Tcl; o build foi repetido fora desse isolamento, sem modificar
 o Python ou os arquivos do aplicativo.
 
 Erros capturados na inicialização são enviados ao stderr quando disponível. Sem console,
@@ -42,16 +43,17 @@ falhar. O processo retorna código de falha. Não há logs persistentes ou telem
 
 ## Workflow manual
 
-Arquivo: `.github/workflows/build-windows.yml`. Após revisão e envio autorizados, o
-workflow deve estar na branch padrão para aparecer na interface do GitHub Actions.
-Abra **Actions → Build Windows portable → Run workflow**, escolha a referência aprovada
+Arquivo: `.github/workflows/build-windows.yml`. O workflow deve estar na branch padrão
+para aparecer na interface do GitHub Actions.
+Abra **Actions → Build Windows portable → Run workflow**, escolha a referência desejada
 e inicie manualmente. O job usa Windows, Python 3.11 x64, executa testes e sintaxe,
 gera o EXE, verifica tamanho e SHA-256 e envia o artefato **Renamix-Windows-x64**,
 retido por 14 dias. Requer apenas `contents: read`; não cria release ou tag.
 
-O checksum é do arquivo EXE, não do ZIP que o GitHub cria para o artefato. Não há
-resultado remoto declarado nesta implementação. Builds locais e do CI podem ter
-checksums diferentes; sempre use o checksum do mesmo artefato.
+O checksum é do arquivo EXE, não do ZIP que o GitHub cria para o artefato. Consulte
+o [GitHub Actions](https://github.com/amzsants/renamix/actions) para conferir o resultado
+e os artefatos de cada execução. Builds locais e do CI podem ter checksums diferentes;
+sempre use o checksum do mesmo artefato.
 
 ## Validação manual antes de distribuir
 
@@ -67,7 +69,11 @@ checksums diferentes; sempre use o checksum do mesmo artefato.
 7. Repita em Windows 10 e 11 x64 sem Python, idealmente em VM limpa. Não desinstale
    seu Python nem desative antivírus/SmartScreen para fazer esse teste.
 
-## Evidência local da preparação v0.1.1
+## Registro de validação local — v0.1.1
+
+Registro de 1 de novembro de 2026. Os resultados e limites abaixo descrevem o build
+local daquela validação; não representam o estado de todas as execuções posteriores
+do CI nem a disponibilidade de downloads nas releases.
 
 - Windows 11 x64, Python 3.11.18 isolado em `build/` (distribuição
   python-build-standalone obtida por uv, sem registro no Windows), PyInstaller
@@ -100,8 +106,8 @@ checksums diferentes; sempre use o checksum do mesmo artefato.
   e seus dados ficaram em `build/`, sem integrar o executável ou os arquivos versionados.
 
 O autor confirmou manualmente abertura, interface, renomeação com arquivos de teste,
-CSV e troca/persistência de temas no executável anterior. O novo build 0.1.1 deve
-receber uma conferência manual final com o checklist acima.
+CSV e troca/persistência de temas no executável anterior. Cada build destinado à
+distribuição deve passar pela conferência manual do checklist acima.
 
 Na finalização da documentação, três capturas reais com título 0.1.1 foram revisadas
 e integradas ao README: prévia com três propostas prontas, Dark Beach e Vampire.
@@ -111,4 +117,6 @@ em Python 3.11.18: 67 testes, 64 aprovados, três ignorados e nenhuma falha.
 
 Não foi testada uma máquina sem Python instalado. Também não foram homologados
 Windows 10, todas as políticas antivírus ou o build remoto Python 3.11.
-O executável local não é uma release publicada nem assinada.
+O executável local validado não possui assinatura digital. O checksum deste registro
+identifica esse build local; confira os ativos de cada release para obter os arquivos
+de distribuição e seus checksums correspondentes.

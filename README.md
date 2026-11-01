@@ -5,7 +5,7 @@
 Renomeie arquivos em lote com prévia, confirmação e proteção contra sobrescrita.
 Aplicativo desktop com interface em **PT-BR**, **oito temas** e uso **offline**.
 
-**v0.1.1 em preparação** · Python 3.11+ · MIT
+Versão do código: **0.1.1** · Python 3.11+ · MIT
 
 [Windows portátil](#download-para-windows) · [Como usar](#como-usar) · [Desenvolvimento](#desenvolvimento) · [Contribuindo](#contribuindo)
 
@@ -16,8 +16,9 @@ arquivos finais. Escolha uma pasta, aplique uma regra e confira cada nome antes 
 confirmar. O conteúdo dos arquivos permanece intacto.
 
 O mesmo aplicativo pode ser executado pelo código-fonte ou pelo **Renamix.exe portátil
-para Windows**, preparado para a futura v0.1.1. Não há contas, telemetria ou serviços
-externos durante o uso. A v0.1.1 ainda não foi publicada.
+para Windows**. Consulte a [página de releases](https://github.com/amzsants/renamix/releases)
+para verificar as versões e os downloads disponíveis. Não há contas, telemetria ou
+serviços externos durante o uso.
 
 ## Como funciona
 
@@ -57,7 +58,7 @@ sucesso parcial; confira os resultados antes de iniciar outra operação.
 | **CSV** | Exporte resultados e falhas para um relatório novo, sem sobrescrita. |
 | **Oito temas** | Troque a aparência e restaure a preferência na próxima abertura. |
 | **Interface PT-BR** | Use controles, confirmações e mensagens em português brasileiro. |
-| **Windows portátil** | Execute sem instalar Python; primeira distribuição prevista na v0.1.1. |
+| **Windows portátil** | Execute sem instalar Python; confira os downloads na página de releases. |
 
 Uma regra por operação. Somente arquivos regulares diretamente na pasta são elegíveis.
 Subpastas, links, pontos de nova análise do Windows e ocultos são exibidos como
@@ -131,19 +132,20 @@ título podem seguir o tema do sistema operacional.
 
 ## Download para Windows
 
-O primeiro executável portátil está em preparação para a **v0.1.1**, ainda não
-publicada. O download será disponibilizado após revisão e aprovação da distribuição.
+Consulte as [releases do projeto](https://github.com/amzsants/renamix/releases) para
+verificar quais versões oferecem `Renamix.exe`, checksum SHA-256 e licença.
+O empacotamento portátil está incluído no código a partir da versão 0.1.1;
+a disponibilidade dos binários depende dos ativos de cada release.
 
-Quando aprovado, o `Renamix.exe` será oferecido nas
-[releases do projeto](https://github.com/amzsants/renamix/releases). Antes da release,
-builds de revisão também poderão ser baixados nos artefatos do workflow **Build Windows
-portable**. Extraia o artefato e abra `Renamix.exe`: não é necessário instalar Python,
-executar como administrador ou instalar o aplicativo. Mantenha a licença junto à cópia
+Builds de revisão também podem ser obtidos nos artefatos de execuções concluídas
+do workflow **Build Windows portable**. Extraia o download e abra `Renamix.exe`:
+não é necessário instalar Python, executar como administrador ou instalar o aplicativo.
+Mantenha a licença junto à cópia
 distribuída. Windows 10/11 x64 são os alvos, sujeitos à validação descrita abaixo.
 
 As preferências continuam em `%APPDATA%\Renamix\settings.json`, e não ao lado do EXE.
 O modo onefile extrai bibliotecas em uma pasta temporária ao iniciar; isso pode causar
-uma pequena demora. Não requer rede durante o uso. O EXE ainda não tem assinatura
+uma pequena demora. Não requer rede durante o uso. O EXE não tem assinatura
 digital e pode gerar avisos do SmartScreen ou antivírus. Não desative proteções;
 confira a origem e o checksum e interrompa o uso se houver dúvida. Não há garantia
 de ausência de falsos positivos.
@@ -385,8 +387,8 @@ Os dois testes de links só são ignorados no Windows quando a criação retorna
 exclusivo de POSIX. Ignorados não são contabilizados como aprovados.
 
 O workflow de testes está configurado para executar a suíte sem interface em Ubuntu,
-Windows e macOS com Python 3.11, além de conferir sintaxe e instalação. Criar o workflow
-localmente não significa que ele já tenha sido executado no GitHub.
+Windows e macOS com Python 3.11, além de conferir sintaxe e instalação. Consulte o
+[GitHub Actions](https://github.com/amzsants/renamix/actions) para os resultados de cada execução.
 
 Consulte [o registro de validação local](docs/VALIDATION.md) para resultados reais
 e verificações manuais ainda pendentes.
