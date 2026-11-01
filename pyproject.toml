@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "renamix"
+version = "0.1.0"
+description = "Safe batch file renaming for local workflows"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{name = "Amoz Santos"}]
+dependencies = []
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Topic :: Desktop Environment :: File Managers",
+]
+
+[project.gui-scripts]
+renamix = "renamix.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["renamix*"]
