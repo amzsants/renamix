@@ -1,16 +1,26 @@
 # Capturas reais do Renamix
 
-Pasta reservada para imagens do aplicativo em execução. Nenhum PNG está presente
-neste checkout; a legibilidade e a privacidade das cinco capturas ainda não puderam
-ser avaliadas. Não crie imagens vazias, montagens ou capturas fictícias.
+Capturas reais do Renamix 0.1.1 no Windows, fornecidas pelo autor. Não crie imagens
+vazias, montagens ou capturas fictícias.
 
-| Arquivo previsto | Conteúdo |
-| --- | --- |
-| `main-window.png` | Aba Renomear, com três arquivos de exemplo e prévia. |
-| `themes.png` | Aba Temas com as oito opções. |
-| `dark-beach.png` | Prévia no tema Dark Beach. |
-| `vampire.png` | Prévia no tema Vampire. |
-| `conflict.png` | Destino ocupado, com status e mensagem legíveis. |
+| Arquivo | Conteúdo | Estado |
+| --- | --- | --- |
+| `main-window.png` | Substituição IMG → Foto: três propostas prontas e um CSV sem alterações, no Dark Beach. | Integrada |
+| `themes.png` | Aba Temas com as oito opções. | Pendente |
+| `dark-beach.png` | Tema Dark Beach, sem regra preenchida e com tabela vazia. | Integrada |
+| `vampire.png` | Tema Vampire, sem regra preenchida e com tabela vazia. | Integrada |
+| `conflict.png` | Destino ocupado, com status e mensagem legíveis. | Pendente |
+
+As três imagens foram revisadas em tamanho original e em largura de 960 pixels.
+Os PNGs mantêm suas dimensões originais: 1365 × 720 para a prévia e 1365 × 722
+para os temas. A escala de tela não foi informada. O README permite ampliar cada
+imagem; os dois exemplos de temas ficam em uma seção expansível.
+
+Com autorização do autor, somente o caminho pessoal no campo de pasta foi coberto
+com `[caminho ocultado]`, usando Python. Os demais pixels foram preservados e os
+PNGs publicados não carregam metadados adicionais. Os originais foram guardados
+localmente em `build/screenshots-originals-v011/`, ignorado pelo Git, com hashes
+registrados para conferência. Não versione esses originais nem a pasta de build.
 
 Use uma pasta descartável com nomes fictícios, como `IMG_001.jpg`, `IMG_002.jpg` e
 `IMG_003.jpg`, e configure a substituição `IMG_` → `Foto_`. Para a captura de conflito,

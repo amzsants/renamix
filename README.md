@@ -69,20 +69,43 @@ A aparência padrão combina fundo escuro, painéis discretos e destaque vermelh
 ação de renomear. A interface foi validada manualmente no Windows pelo autor,
 incluindo os temas Dark Beach e Vampire.
 
-**Capturas reais pendentes.** Nenhum PNG está disponível neste checkout. Os cinco
-registros abaixo aguardam imagens reais e revisão de legibilidade e privacidade.
+Capturas reais do **Renamix 0.1.1 no Windows**. Somente o caminho pessoal foi
+ocultado para preservar a privacidade; os demais elementos foram mantidos.
+Clique em uma imagem para abrir em tamanho original.
 
-| Captura | O que mostrará | Arquivo previsto em `docs/assets/screenshots/` | Status |
-| --- | --- | --- | --- |
-| Tela principal | Três arquivos de exemplo e seus nomes propostos. | `main-window.png` | Ausente |
-| Aba de temas | As oito opções e o tema selecionado. | `themes.png` | Ausente |
-| Dark Beach | A prévia com a paleta Dark Beach. | `dark-beach.png` | Ausente |
-| Vampire | A prévia com a paleta Vampire. | `vampire.png` | Ausente |
-| Conflito detectado | Um destino ocupado, status e explicação visíveis. | `conflict.png` | Ausente |
+<p align="center">
+  <a href="docs/assets/screenshots/main-window.png">
+    <img src="docs/assets/screenshots/main-window.png" width="960" alt="Renamix 0.1.1 no tema Dark Beach: substituição de IMG por Foto, três arquivos prontos e um CSV sem alterações">
+  </a>
+</p>
 
-Veja o [guia de capturas](docs/assets/screenshots/README.md) para produzir as imagens
-com dados de exemplo. Quando existirem e forem revisadas, elas poderão ser exibidas
-nesta seção com legendas. Fontes, diálogos e escala podem variar entre sistemas.
+**Pré-visualização.** Três propostas de renomeação prontas e um relatório CSV sem
+alterações. A captura mostra a conferência dos nomes antes da confirmação.
+
+<details>
+<summary>Ver os temas Dark Beach e Vampire</summary>
+
+<p align="center">
+  <a href="docs/assets/screenshots/dark-beach.png">
+    <img src="docs/assets/screenshots/dark-beach.png" width="960" alt="Renamix 0.1.1 no tema Dark Beach, com fundo azul escuro, tabela vazia e aviso de regra sem texto">
+  </a>
+</p>
+
+**Dark Beach.** Aparência em azul escuro e lilás, antes de preencher a regra.
+
+<p align="center">
+  <a href="docs/assets/screenshots/vampire.png">
+    <img src="docs/assets/screenshots/vampire.png" width="960" alt="Renamix 0.1.1 no tema Vampire, com fundo preto, detalhes vinho, tabela vazia e aviso de regra sem texto">
+  </a>
+</p>
+
+**Vampire.** Aparência em preto e vinho, antes de preencher a regra.
+
+</details>
+
+Ainda faltam capturas da **aba Temas** e de um **conflito detectado**. Veja o
+[guia de capturas](docs/assets/screenshots/README.md). Fontes, diálogos e escala
+podem variar entre sistemas.
 
 ## Temas
 
@@ -281,7 +304,7 @@ renamix/
 ├── docs/
 │   ├── WINDOWS.md              # construção e validação do executável
 │   ├── VALIDATION.md            # registro da auditoria anterior
-│   └── assets/screenshots/     # espaço reservado para capturas reais
+│   └── assets/screenshots/     # capturas reais e guia de contribuição
 ├── CONTRIBUTING.md
 ├── LICENSE
 ├── README.md

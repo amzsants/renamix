@@ -103,6 +103,12 @@ O autor confirmou manualmente abertura, interface, renomeação com arquivos de 
 CSV e troca/persistência de temas no executável anterior. O novo build 0.1.1 deve
 receber uma conferência manual final com o checklist acima.
 
+Na finalização da documentação, três capturas reais com título 0.1.1 foram revisadas
+e integradas ao README: prévia com três propostas prontas, Dark Beach e Vampire.
+Somente o caminho pessoal foi ocultado com autorização do autor. As capturas não
+substituem o checklist funcional do novo executável. A suíte foi executada novamente
+em Python 3.11.18: 67 testes, 64 aprovados, três ignorados e nenhuma falha.
+
 Não foi testada uma máquina sem Python instalado. Também não foram homologados
 Windows 10, todas as políticas antivírus ou o build remoto Python 3.11.
 O executável local não é uma release publicada nem assinada.
