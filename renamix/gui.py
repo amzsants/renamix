@@ -10,19 +10,18 @@ from . import __version__
 from .executor import execute, export_csv
 from .planner import READY, build_plan
 from .planner import Rule
+from .themes import DEFAULT_THEME, THEMES, apply_theme, load_theme, save_theme
 
-BG = "#0D1117"
-PANEL = "#161B22"
-BORDER = "#30363D"
-TEXT = "#E6EDF3"
-MUTED = "#8B949E"
-RED = "#E63946"
 KINDS = {"Prefixo": "prefix", "Sufixo": "suffix", "Substituição": "replace"}
 
 
 class App:
-    def __init__(self, root):
+    def __init__(self, root, settings_path=None):
         self.root = root
+        self.settings_path = settings_path
+        self.theme_id = tk.StringVar(master=root, value=load_theme(settings_path))
+        self.theme_current = tk.StringVar(master=root)
+        self.theme_message = tk.StringVar(master=root)
         self.plan = None
         self.report = None
         self.busy = False
@@ -40,56 +39,31 @@ class App:
         height = min(680, root.winfo_screenheight() - 108)
         root.geometry(f"{width}x{height}+40+16")
         root.minsize(900, 660)
-        root.configure(bg=BG)
         root.protocol("WM_DELETE_WINDOW", self.close)
-        self.style()
+        apply_theme(root, self.theme_id.get())
         self.build()
+        self.refresh_theme()
         for variable in (self.folder, self.kind, self.text, self.replacement):
             variable.trace_add("write", self.changed)
         root.after(80, self.poll)
 
-    def style(self):
-        style = ttk.Style(self.root)
-        style.theme_use("clam")
-        style.configure(".", background=BG, foreground=TEXT, font=("Segoe UI", 10),
-                        bordercolor=BORDER, lightcolor=BORDER, darkcolor=BORDER)
-        style.configure("TFrame", background=BG)
-        style.configure("TLabel", background=BG)
-        style.configure("Muted.TLabel", foreground=MUTED)
-        style.configure("Title.TLabel", font=("Segoe UI", 25, "bold"))
-        style.configure("TButton", background=PANEL, padding=(14, 7), borderwidth=1)
-        style.map("TButton", background=[("active", BORDER)],
-                  foreground=[("disabled", MUTED)])
-        style.configure("Accent.TButton", background=RED, foreground="white")
-        style.map("Accent.TButton", background=[("disabled", BORDER), ("active", "#C72F3C")])
-        style.configure("TEntry", fieldbackground=PANEL, insertcolor=TEXT, padding=6)
-        style.configure("TCombobox", fieldbackground=PANEL, padding=6, arrowcolor=TEXT)
-        style.map("TCombobox", fieldbackground=[("readonly", PANEL)],
-                  foreground=[("readonly", TEXT)])
-        style.configure("Treeview", background=PANEL, fieldbackground=PANEL,
-                        foreground=TEXT, rowheight=30, borderwidth=0)
-        style.configure("Treeview.Heading", background=BORDER, foreground=TEXT, padding=8)
-        style.map("Treeview", background=[("selected", "#3B2530")],
-                  foreground=[("selected", TEXT)])
-        style.configure("TLabelframe", background=BG)
-        style.configure("TLabelframe.Label", background=BG, foreground=MUTED)
-        self.root.option_add("*TCombobox*Listbox.background", PANEL)
-        self.root.option_add("*TCombobox*Listbox.foreground", TEXT)
-
     def build(self):
-        main = ttk.Frame(self.root, padding=12)
-        main.grid(sticky="nsew")
+        self.notebook = ttk.Notebook(self.root)
+        self.notebook.grid(row=0, column=0, sticky="nsew")
+        self.notebook.enable_traversal()
+        main = ttk.Frame(self.notebook, padding=10)
+        self.notebook.add(main, text="Renomear", underline=0)
         self.root.rowconfigure(0, weight=1)
         self.root.columnconfigure(0, weight=1)
         main.columnconfigure(0, weight=1)
         # Only the preview absorbs resizing; keep room for headings and rows.
         main.rowconfigure(4, weight=1, minsize=160)
         heading = ttk.Frame(main)
-        heading.grid(row=0, column=0, sticky="ew", pady=(0, 10))
+        heading.grid(row=0, column=0, sticky="ew", pady=(0, 6))
         ttk.Label(heading, text="RENAMIX", style="Title.TLabel").pack(side="left")
         ttk.Label(heading, text="Safe batch file renaming for local workflows",
                   style="Muted.TLabel").pack(side="left", padx=(16, 0))
-        folder = ttk.LabelFrame(main, text="01  Pasta local", padding=6)
+        folder = ttk.LabelFrame(main, text="01  Pasta local", padding=4)
         folder.grid(row=1, column=0, sticky="ew", pady=(0, 8))
         folder.columnconfigure(0, weight=1)
         path = ttk.Entry(folder, textvariable=self.folder)
@@ -97,8 +71,8 @@ class App:
         choose = ttk.Button(folder, text="Selecionar pasta…", command=self.choose)
         choose.grid(row=0, column=1)
         ttk.Label(folder, text="Somente arquivos diretos • Sem subpastas, ocultos ou links",
-                  style="Muted.TLabel").grid(row=1, column=0, columnspan=2, sticky="w", pady=(4, 0))
-        rules = ttk.LabelFrame(main, text="02  Regra de renomeação", padding=6)
+                  style="Muted.TLabel").grid(row=1, column=0, columnspan=2, sticky="w", pady=(2, 0))
+        rules = ttk.LabelFrame(main, text="02  Regra de renomeação", padding=4)
         rules.grid(row=2, column=0, sticky="ew", pady=(0, 8))
         rules.columnconfigure(1, weight=1)
         rules.columnconfigure(2, weight=1)
@@ -111,8 +85,8 @@ class App:
         self.replace_entry = ttk.Entry(rules, textvariable=self.replacement, state="disabled")
         self.replace_entry.grid(row=1, column=2, sticky="ew")
         ttk.Label(rules, text="Uma regra por vez. Todas as extensões são preservadas (ex.: .tar.gz).",
-                  style="Muted.TLabel").grid(row=2, column=0, columnspan=3, sticky="w", pady=(4, 0))
-        ttk.Label(main, textvariable=self.status, wraplength=930).grid(row=3, column=0, sticky="ew", pady=(0, 10))
+                  style="Muted.TLabel").grid(row=2, column=0, columnspan=3, sticky="w", pady=(2, 0))
+        ttk.Label(main, textvariable=self.status, wraplength=930).grid(row=3, column=0, sticky="ew", pady=(0, 6))
         table = ttk.Frame(main)
         table.grid(row=4, column=0, sticky="nsew")
         table.rowconfigure(0, weight=1)
@@ -129,8 +103,6 @@ class App:
         horizontal = ttk.Scrollbar(table, orient="horizontal", command=self.tree.xview)
         horizontal.grid(row=1, column=0, sticky="ew")
         self.tree.configure(yscrollcommand=vertical.set, xscrollcommand=horizontal.set)
-        self.tree.tag_configure("error", foreground="#FF8993")
-        self.tree.tag_configure("muted", foreground=MUTED)
         actions = ttk.Frame(main)
         actions.grid(row=5, column=0, sticky="ew", pady=(8, 8))
         actions.columnconfigure(1, weight=1)
@@ -144,6 +116,63 @@ class App:
         ttk.Label(main, textvariable=self.summary, style="Muted.TLabel", wraplength=930).grid(
             row=6, column=0, sticky="ew")
         self.controls = [(path, "normal"), (choose, "normal"), (kind, "readonly"), (text, "normal")]
+        self.rule_combo = kind
+        self.build_themes()
+
+    def build_themes(self):
+        page = ttk.Frame(self.notebook, padding=12)
+        self.notebook.add(page, text="Temas", underline=0)
+        page.columnconfigure(0, weight=1)
+        page.rowconfigure(2, weight=1)
+        ttk.Label(page, text="Personalização", style="Section.TLabel").grid(
+            row=0, column=0, sticky="w")
+        ttk.Label(page, text="Escolha uma paleta. A aparência muda imediatamente nas duas abas.",
+                  style="Muted.TLabel").grid(row=1, column=0, sticky="w", pady=(4, 10))
+        catalog = ttk.Frame(page)
+        catalog.grid(row=2, column=0, sticky="nsew")
+        for column in range(2):
+            catalog.columnconfigure(column, weight=1, uniform="themes")
+        for row in range(4):
+            catalog.rowconfigure(row, weight=1, uniform="themes")
+        for index, (theme_id, theme) in enumerate(THEMES.items()):
+            card = ttk.Frame(catalog, style="Card.TFrame", padding=8)
+            card.grid(row=index // 2, column=index % 2, sticky="nsew", padx=4, pady=4)
+            card.columnconfigure(0, weight=1)
+            ttk.Radiobutton(card, text=theme.name, value=theme_id, variable=self.theme_id,
+                            style="Card.TRadiobutton", command=self.select_theme).grid(
+                                row=0, column=0, sticky="w")
+            description = ttk.Label(card, text=theme.description, style="Card.TLabel", wraplength=360)
+            description.grid(row=1, column=0, sticky="ew", pady=(2, 4))
+            card.bind("<Configure>", lambda event, label=description:
+                      label.configure(wraplength=max(100, event.width - 20)))
+            swatches = ttk.Frame(card, style="Card.TFrame", borderwidth=0)
+            swatches.grid(row=2, column=0, sticky="w")
+            for color in (theme.background, theme.surface, theme.accent, theme.secondary):
+                tk.Label(swatches, bg=color, width=4, height=1, font=("Segoe UI", 4),
+                         borderwidth=0).pack(side="left", padx=(0, 3))
+        footer = ttk.Frame(page)
+        footer.grid(row=3, column=0, sticky="ew", pady=(10, 0))
+        footer.columnconfigure(0, weight=1)
+        ttk.Label(footer, textvariable=self.theme_current).grid(row=0, column=0, sticky="w")
+        ttk.Button(footer, text="Restaurar tema original", command=lambda: self.select_theme(DEFAULT_THEME)).grid(
+            row=0, column=1, sticky="e")
+        ttk.Label(page, textvariable=self.theme_message, style="Muted.TLabel", wraplength=840).grid(
+            row=4, column=0, sticky="w", pady=(6, 0))
+
+    def refresh_theme(self):
+        theme_id = self.theme_id.get()
+        apply_theme(self.root, theme_id, tree=self.tree, comboboxes=(self.rule_combo,))
+        self.theme_current.set(f"Tema atual: {THEMES[theme_id].name}")
+
+    def select_theme(self, theme_id=None):
+        if theme_id is not None:
+            self.theme_id.set(theme_id)
+        self.refresh_theme()
+        try:
+            save_theme(self.theme_id.get(), self.settings_path)
+            self.theme_message.set("Preferência salva automaticamente para a próxima abertura.")
+        except OSError:
+            self.theme_message.set("Tema aplicado nesta sessão. Não foi possível salvar a preferência.")
 
     def choose(self):
         selected = filedialog.askdirectory(parent=self.root, title="Selecionar pasta")
@@ -228,7 +257,8 @@ class App:
         self.root.after(80, self.poll)
 
     def add_row(self, original, proposed, status, detail):
-        tag = "error" if status in {"Conflito", "Inválido", "Falha"} else "muted" if status in {"Ignorado", "Sem alterações"} else ""
+        tag = ("error" if status in {"Inválido", "Falha"} else "warning" if status == "Conflito"
+               else "success" if status in {"Pronto", "Renomeado"} else "muted")
         self.tree.insert("", "end", values=(original, proposed, status, detail), tags=(tag,))
 
     def apply(self):

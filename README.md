@@ -11,7 +11,7 @@ Versão **0.1.0** · Python **3.11+** · Licença **MIT**
 
 ## Preview
 
-A interface usa fundo escuro, painéis discretos e destaque vermelho na ação de renomear.
+A aparência padrão usa fundo escuro, painéis discretos e destaque vermelho na ação de renomear.
 Pasta, regra, prévia e relatório ficam na mesma janela. O tema `clam` oferece uma base
 comum; fontes, seletores nativos e escala podem variar conforme o sistema operacional.
 
@@ -27,10 +27,31 @@ ou imagem simulada apresentada como captura do aplicativo.
 - Revalidação de identidade, tamanho e datas dos arquivos antes da execução.
 - Renomeação nativa sem substituição do destino, com falhas reportadas por arquivo.
 - Relatório com totais e exportação CSV opcional, sem sobrescrever relatórios existentes.
+- Oito temas visuais, com troca imediata e preferência salva localmente.
 
 Somente arquivos regulares diretamente na pasta são elegíveis. Subpastas, links,
 pontos de nova análise do Windows e ocultos são exibidos como ignorados. A contagem
 de analisados inclui todas as entradas da tabela, inclusive essas entradas ignoradas.
+
+## Temas
+
+Na aba **Temas**, escolha uma das oito paletas: **Renamix Original**, **ChatGPT Dark**,
+**ChatGPT Light**, **Codex Dark**, **Codex Light**, **Sakura**, **Dark Beach** e **Vampire**.
+As amostras mostram as cores; a escolha atual aparece no rodapé. Para voltar à aparência
+padrão, use **Restaurar tema original**. Mouse e teclado funcionam nos controles;
+`Ctrl+Tab` alterna entre **Renomear** e **Temas**.
+
+A mudança é imediata e preserva pasta, regra, prévia e relatório da sessão. A preferência
+é restaurada na próxima abertura e fica em um pequeno `settings.json`, fora da pasta
+de arquivos: `%APPDATA%\Renamix` no Windows, `~/Library/Application Support/Renamix`
+no macOS e `${XDG_CONFIG_HOME:-~/.config}/renamix` no Linux. Configurações ausentes ou
+inválidas recuperam o tema original; se não houver permissão para salvar, o tema continua
+ativo apenas na sessão, com aviso na aba. Tudo funciona offline.
+
+Os temas ChatGPT e Codex são interpretações cromáticas, sem vínculo oficial com os
+produtos. Dark Beach usa apenas cores originais inspiradas em uma atmosfera noturna;
+não inclui capas, imagens ou logotipos. Seletores de arquivo, mensagens e a barra de
+título podem seguir o tema do sistema operacional.
 
 ## Instalação
 
@@ -181,10 +202,12 @@ renamix/
 │   ├── __main__.py       # inicialização
 │   ├── gui.py            # tema, eventos e apresentação
 │   ├── planner.py        # regras, validação e prévia sem escrita
-│   └── executor.py       # revalidação, chamada nativa e relatório CSV
+│   ├── executor.py       # revalidação, chamada nativa e relatório CSV
+│   └── themes.py         # paletas, estilos e preferência visual local
 ├── tests/
 │   ├── test_planner.py
-│   └── test_executor.py
+│   ├── test_executor.py
+│   └── test_themes.py
 ├── .github/workflows/tests.yml
 ├── .gitignore
 ├── CONTRIBUTING.md
