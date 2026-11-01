@@ -56,6 +56,36 @@ produtos. Dark Beach usa apenas cores originais inspiradas em uma atmosfera notu
 não inclui capas, imagens ou logotipos. Seletores de arquivo, mensagens e a barra de
 título podem seguir o tema do sistema operacional.
 
+## Download para Windows
+
+O processo de build portátil está preparado para a futura **v0.1.1**. A disponibilização
+do executável depende de aprovação e publicação posterior; esta alteração não publica
+nenhuma release nem modifica a tag v0.1.0.
+
+Quando aprovado, o `Renamix.exe` será oferecido nas
+[releases do projeto](https://github.com/amzsants/renamix/releases). Antes da release,
+builds autorizados também poderão ser baixados nos artefatos do workflow **Build Windows
+portable**. Extraia o artefato e abra `Renamix.exe`: não é necessário instalar Python,
+executar como administrador ou instalar o aplicativo. Mantenha a licença junto à cópia
+distribuída. Windows 10/11 x64 são os alvos, sujeitos à validação descrita abaixo.
+
+As preferências continuam em `%APPDATA%\Renamix\settings.json`, e não ao lado do EXE.
+O modo onefile extrai bibliotecas em uma pasta temporária ao iniciar; isso pode causar
+uma pequena demora. Não requer rede durante o uso. O EXE ainda não tem assinatura
+digital e pode gerar avisos do SmartScreen ou antivírus. Não desative proteções;
+confira a origem e o checksum e interrompa o uso se houver dúvida. Não há garantia
+de ausência de falsos positivos.
+
+Para verificar o SHA-256, compare com o arquivo `Renamix.exe.sha256` do mesmo build:
+
+```powershell
+Get-FileHash .\Renamix.exe -Algorithm SHA256
+```
+
+Isso verifica integridade, sem substituir a verificação da origem do download.
+Veja [como construir e validar](docs/WINDOWS.md). Quem preferir pode continuar
+executando pelo código-fonte, conforme a instalação abaixo.
+
 ## Instalação
 
 É possível executar a partir do código, sem instalar pacotes externos:

@@ -13,3 +13,5 @@ Thumbs.db
 .idea/
 .vscode/
 .validation-install/
+.venv-build/
+Renamix-*.zip
