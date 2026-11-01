@@ -86,7 +86,9 @@ class PlannerTests(unittest.TestCase):
         link = self.folder / "link.txt"
         try:
             link.symlink_to(self.folder / "missing.txt")
-        except OSError:
+        except OSError as exc:
+            if os.name != "nt" or getattr(exc, "winerror", None) != 1314:
+                raise
             self.skipTest("Criação de links exige privilégios neste sistema.")
         op, = self.plan(Rule("prefix", "x")).operations
         self.assertEqual(op.status, IGNORED)

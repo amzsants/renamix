@@ -181,7 +181,9 @@ class ExecutorTests(unittest.TestCase):
         link = self.folder / "temporary-link"
         try:
             link.symlink_to(target)
-        except OSError:
+        except OSError as exc:
+            if os.name != "nt" or getattr(exc, "winerror", None) != 1314:
+                raise
             self.skipTest("Criação de links exige privilégios neste sistema.")
         source.unlink()
         link.rename(source)
