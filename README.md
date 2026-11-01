@@ -69,15 +69,16 @@ A aparência padrão combina fundo escuro, painéis discretos e destaque vermelh
 ação de renomear. A interface foi validada manualmente no Windows pelo autor,
 incluindo os temas Dark Beach e Vampire.
 
-**Capturas reais pendentes.** Estes são os cinco registros previstos:
+**Capturas reais pendentes.** Nenhum PNG está disponível neste checkout. Os cinco
+registros abaixo aguardam imagens reais e revisão de legibilidade e privacidade.
 
-| Captura | O que mostrará | Arquivo reservado em `docs/assets/screenshots/` |
-| --- | --- | --- |
-| Tela principal | Três arquivos de exemplo e seus nomes propostos. | `main-window.png` |
-| Aba de temas | As oito opções e o tema selecionado. | `themes.png` |
-| Dark Beach | A prévia com a paleta Dark Beach. | `dark-beach.png` |
-| Vampire | A prévia com a paleta Vampire. | `vampire.png` |
-| Conflito detectado | Um destino ocupado, status e explicação visíveis. | `conflict.png` |
+| Captura | O que mostrará | Arquivo previsto em `docs/assets/screenshots/` | Status |
+| --- | --- | --- | --- |
+| Tela principal | Três arquivos de exemplo e seus nomes propostos. | `main-window.png` | Ausente |
+| Aba de temas | As oito opções e o tema selecionado. | `themes.png` | Ausente |
+| Dark Beach | A prévia com a paleta Dark Beach. | `dark-beach.png` | Ausente |
+| Vampire | A prévia com a paleta Vampire. | `vampire.png` | Ausente |
+| Conflito detectado | Um destino ocupado, status e explicação visíveis. | `conflict.png` | Ausente |
 
 Veja o [guia de capturas](docs/assets/screenshots/README.md) para produzir as imagens
 com dados de exemplo. Quando existirem e forem revisadas, elas poderão ser exibidas

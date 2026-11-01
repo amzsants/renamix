@@ -1,7 +1,8 @@
 # Capturas reais do Renamix
 
-Pasta reservada para imagens do aplicativo em execução. Os arquivos abaixo ainda
-não existem; não crie imagens vazias, montagens ou capturas fictícias.
+Pasta reservada para imagens do aplicativo em execução. Nenhum PNG está presente
+neste checkout; a legibilidade e a privacidade das cinco capturas ainda não puderam
+ser avaliadas. Não crie imagens vazias, montagens ou capturas fictícias.
 
 | Arquivo previsto | Conteúdo |
 | --- | --- |
@@ -24,12 +25,34 @@ Confira nomes, status, detalhes e botões antes de salvar. Prefira PNG, mantenha
 dimensões consistentes e anote versão do aplicativo, sistema, resolução e escala
 para a legenda. Preserve a captura original quando não houver necessidade de edição.
 
-Depois de revisar cada imagem, incorpore-a na seção Screenshots do README principal
-com texto alternativo e legenda. Exemplo de marcação, para usar somente quando o
-arquivo existir:
+## Revisão e integração
+
+Antes de incorporar cada PNG:
+
+1. Abra a imagem em tamanho original e confira nomes, propostas, status e botões.
+2. Confirme que ela corresponde à tela ou ao tema indicado pelo nome do arquivo.
+3. Confira se o campo de pasta, nomes de arquivos e outras áreas não expõem dados
+   pessoais desnecessários. Se expuserem, prefira uma nova captura com dados de teste.
+4. Confira também em largura reduzida: textos importantes devem continuar legíveis.
+
+Exiba uma captura por linha, com largura de até 960 pixels e preservando a proporção.
+Evite colocar telas completas em colunas estreitas. Use uma legenda curta e um link
+para a imagem original, permitindo ampliá-la. Descreva no texto alternativo o estado
+visível, incluindo conflito ou tema quando relevante.
+
+Depois da revisão, substitua somente a entrada correspondente na tabela de pendências
+do README pela imagem disponível. Mantenha as demais como ausentes; não inclua tags de
+imagem para arquivos que ainda não existem. Atualize também o estado das capturas em
+`docs/assets/README.md` e preserve os dois blocos Mermaid do README principal.
+
+Exemplo para o README principal, para usar somente quando o arquivo existir:
 
 ```markdown
-![Tela principal do Renamix com três propostas de renomeação](docs/assets/screenshots/main-window.png)
+<p align="center">
+  <a href="docs/assets/screenshots/main-window.png">
+    <img src="docs/assets/screenshots/main-window.png" width="960" alt="Tela principal do Renamix com três propostas de renomeação">
+  </a>
+</p>
 
 Tela principal · Renamix 0.1.1 · Windows [versão] · [resolução] · escala [valor].
 ```
