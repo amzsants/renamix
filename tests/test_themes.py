@@ -8,7 +8,7 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
-from renamix.themes import (DEFAULT_THEME, THEMES, apply_theme, contrast, get_theme,
+from renamix.themes import (DEFAULT_THEME, THEMES, apply_theme, blend, contrast, get_theme,
                             load_theme, readable_on, save_theme, settings_path)
 
 
@@ -34,7 +34,7 @@ class ThemeTests(unittest.TestCase):
             "codex-dark": ("#101820", "#1B2935", "#64C8BE", "#E8F0F4"),
             "codex-light": ("#F1F5F7", "#FFFFFF", "#187E85", "#1C303A"),
             "sakura": ("#281C30", "#39283F", "#F0A7C6", "#FFF0F7"),
-            "dark-beach": ("#161430", "#252348", "#9D82DB", "#F0ECFF"),
+            "dark-beach": ("#131329", "#211E40", "#A68BE8", "#F1EEFF"),
             "vampire": ("#090709", "#1B1015", "#B10F2E", "#F5E8EB"),
         }
         for theme_id, colors in expected.items():
@@ -42,15 +42,20 @@ class ThemeTests(unittest.TestCase):
                 theme = get_theme(theme_id)
                 self.assertEqual((theme.background, theme.surface, theme.accent, theme.text), colors)
         self.assertEqual(THEMES["sakura"].secondary, "#A77AAB")
-        self.assertEqual(THEMES["dark-beach"].secondary, "#68C8D9")
-        self.assertEqual(THEMES["vampire"].secondary, "#541221")
+        self.assertEqual(THEMES["dark-beach"].secondary, "#70C8DB")
+        self.assertEqual(THEMES["vampire"].secondary, "#D73B54")
+        self.assertEqual((THEMES["dark-beach"].elevated, THEMES["dark-beach"].border,
+                          THEMES["dark-beach"].muted), ("#29264D", "#514B78", "#B8B2D9"))
+        self.assertEqual((THEMES["vampire"].elevated, THEMES["vampire"].border,
+                          THEMES["vampire"].muted), ("#28161D", "#50313B", "#C6AAB2"))
 
     def test_palette_integrity(self):
         for theme_id, theme in THEMES.items():
             with self.subTest(theme=theme_id):
                 self.assertTrue(theme.description)
                 colors = [getattr(theme, field.name) for field in fields(theme)
-                          if field.name not in {"name", "description"}]
+                          if field.name not in {"name", "description"}
+                          and getattr(theme, field.name) is not None]
                 colors += [theme.border, theme.muted, theme.selection, theme.error,
                            theme.warning, theme.success]
                 for color in colors:
@@ -62,6 +67,8 @@ class ThemeTests(unittest.TestCase):
             with self.subTest(theme=theme_id):
                 self.assertGreaterEqual(contrast(theme.text, theme.background), 4.5)
                 self.assertGreaterEqual(contrast(theme.text, theme.surface), 4.5)
+                self.assertGreaterEqual(contrast(theme.text, theme.elevated), 4.5)
+                self.assertGreaterEqual(contrast(theme.text, blend(theme.elevated, theme.secondary, .35)), 4.5)
                 for color in (theme.muted, theme.error, theme.warning, theme.success):
                     self.assertGreaterEqual(contrast(color, theme.surface), 4.5)
                 for background in (theme.accent, theme.border, theme.selection):

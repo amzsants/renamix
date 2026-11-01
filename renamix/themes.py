@@ -41,6 +41,17 @@ class Theme:
     accent: str
     text: str
     secondary: str
+    raised_surface: str | None = None
+    border_color: str | None = None
+    muted_color: str | None = None
+
+    @property
+    def elevated(self):
+        return self.raised_surface or self.surface
+
+    @property
+    def focus(self):
+        return self.secondary if self.raised_surface else self.accent
 
     @property
     def light(self):
@@ -48,14 +59,18 @@ class Theme:
 
     @property
     def border(self):
-        return "#30363D" if self.name == "Renamix Original" else blend(self.surface, self.text, .24)
+        return self.border_color or ("#30363D" if self.name == "Renamix Original"
+                                     else blend(self.surface, self.text, .24))
 
     @property
     def muted(self):
-        return "#8B949E" if self.name == "Renamix Original" else blend(self.surface, self.text, .74)
+        return self.muted_color or ("#8B949E" if self.name == "Renamix Original"
+                                    else blend(self.surface, self.text, .74))
 
     @property
     def selection(self):
+        if self.raised_surface:
+            return blend(self.elevated, self.secondary, .3)
         return blend(self.surface, self.accent, .3)
 
     @property
@@ -85,9 +100,11 @@ THEMES = {
     "sakura": Theme("Sakura", "Rosa suave e lilás em uma noite tranquila.",
                     "#281C30", "#39283F", "#F0A7C6", "#FFF0F7", "#A77AAB"),
     "dark-beach": Theme("Dark Beach", "Lavanda, mar noturno e atmosfera dreamwave.",
-                        "#161430", "#252348", "#9D82DB", "#F0ECFF", "#68C8D9"),
+                        "#131329", "#211E40", "#A68BE8", "#F1EEFF", "#70C8DB",
+                        raised_surface="#29264D", border_color="#514B78", muted_color="#B8B2D9"),
     "vampire": Theme("Vampire", "Preto, vinho e vermelho em um visual gótico.",
-                     "#090709", "#1B1015", "#B10F2E", "#F5E8EB", "#541221"),
+                     "#090709", "#1B1015", "#B10F2E", "#F5E8EB", "#D73B54",
+                     raised_surface="#28161D", border_color="#50313B", muted_color="#C6AAB2"),
 }
 
 
@@ -150,17 +167,22 @@ def apply_theme(root, theme_id, tree=None, comboboxes=()):
         style.theme_use("clam")
     bg, panel, text = theme.background, theme.surface, theme.text
     border, muted = theme.border, theme.muted
-    active = blend(panel, theme.secondary, .35)
+    elevated, focus = theme.elevated, theme.focus
+    heading = elevated if theme.raised_surface else border
+    section = panel if theme.raised_surface else bg
+    active = blend(elevated, theme.secondary, .35)
     root.configure(bg=bg)
     style.configure(".", background=bg, foreground=text, font=("Segoe UI", 10),
                     bordercolor=border, lightcolor=border, darkcolor=border,
-                    focuscolor=theme.accent, troughcolor=bg)
+                    focuscolor=focus, troughcolor=bg)
     style.configure("TFrame", background=bg)
     style.configure("TLabel", background=bg, foreground=text)
     style.configure("Muted.TLabel", foreground=muted)
+    style.configure("Panel.TLabel", background=section)
+    style.configure("Panel.Muted.TLabel", background=section)
     style.configure("Title.TLabel", font=("Segoe UI", 25, "bold"))
     style.configure("Section.TLabel", font=("Segoe UI", 18, "bold"))
-    style.configure("TButton", background=panel, foreground=text, padding=(14, 6), borderwidth=1)
+    style.configure("TButton", background=elevated, foreground=text, padding=(14, 6), borderwidth=1)
     style.map("TButton", background=[("disabled", panel), ("pressed", active), ("active", active)],
               foreground=[("disabled", muted), ("!disabled", text)])
     style.configure("Accent.TButton", background=theme.accent, foreground=readable_on(theme.accent))
@@ -168,25 +190,25 @@ def apply_theme(root, theme_id, tree=None, comboboxes=()):
                                             ("active", theme.accent)],
               foreground=[("disabled", readable_on(border)), ("!disabled", readable_on(theme.accent))])
     for control in ("TEntry", "TCombobox"):
-        style.configure(control, fieldbackground=panel, foreground=text, insertcolor=text,
+        style.configure(control, fieldbackground=elevated, foreground=text, insertcolor=text,
                         padding=5, arrowcolor=text, selectbackground=theme.selection,
                         selectforeground=readable_on(theme.selection))
-        style.map(control, fieldbackground=[("disabled", bg), ("readonly", panel)],
+        style.map(control, fieldbackground=[("disabled", bg), ("readonly", elevated)],
                   foreground=[("disabled", muted), ("readonly", text)],
-                  bordercolor=[("focus", theme.accent)])
+                  bordercolor=[("focus", focus)])
     style.configure("Treeview", background=panel, fieldbackground=panel,
                     foreground=text, rowheight=30, borderwidth=0)
-    style.configure("Treeview.Heading", background=border, foreground=readable_on(border), padding=8)
+    style.configure("Treeview.Heading", background=heading, foreground=readable_on(heading), padding=8)
     style.map("Treeview.Heading", background=[("active", active)], foreground=[("active", text)])
     style.map("Treeview", background=[("selected", theme.selection)],
               foreground=[("selected", readable_on(theme.selection))])
-    style.configure("TLabelframe", background=bg)
-    style.configure("TLabelframe.Label", background=bg, foreground=muted)
+    style.configure("TLabelframe", background=section)
+    style.configure("TLabelframe.Label", background=section, foreground=muted)
     style.configure("TNotebook", background=bg, borderwidth=0, tabmargins=(0, 0, 0, 0))
     style.configure("TNotebook.Tab", background=panel, foreground=muted, padding=(16, 5))
-    style.map("TNotebook.Tab", background=[("selected", bg), ("active", active)],
+    style.map("TNotebook.Tab", background=[("selected", elevated if theme.raised_surface else bg), ("active", active)],
               foreground=[("selected", text), ("active", text)],
-              lightcolor=[("selected", theme.accent)])
+              lightcolor=[("selected", focus)])
     for orientation in ("Vertical", "Horizontal"):
         control = f"{orientation}.TScrollbar"
         style.configure(control, background=border, troughcolor=bg, arrowcolor=text,
@@ -198,14 +220,14 @@ def apply_theme(root, theme_id, tree=None, comboboxes=()):
                     indicatorbackground=bg, indicatorforeground=theme.accent)
     style.map("Card.TRadiobutton", background=[("active", panel)],
               foreground=[("active", text)], indicatorbackground=[("selected", theme.accent)])
-    for option, color in (("background", panel), ("foreground", text),
+    for option, color in (("background", elevated), ("foreground", text),
                           ("selectBackground", theme.selection),
                           ("selectForeground", readable_on(theme.selection))):
         root.option_add(f"*TCombobox*Listbox.{option}", color)
     for combo in comboboxes:
         # Refresh a popdown that may already have been created in the old theme.
         popdown = root.tk.call("ttk::combobox::PopdownWindow", str(combo))
-        root.tk.call(f"{popdown}.f.l", "configure", "-background", panel, "-foreground", text,
+        root.tk.call(f"{popdown}.f.l", "configure", "-background", elevated, "-foreground", text,
                      "-selectbackground", theme.selection, "-selectforeground", readable_on(theme.selection))
     if tree is not None:
         for tag, color in (("error", theme.error), ("warning", theme.warning),

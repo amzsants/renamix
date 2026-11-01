@@ -71,13 +71,13 @@ class App:
         choose = ttk.Button(folder, text="Selecionar pasta…", command=self.choose)
         choose.grid(row=0, column=1)
         ttk.Label(folder, text="Somente arquivos diretos • Sem subpastas, ocultos ou links",
-                  style="Muted.TLabel").grid(row=1, column=0, columnspan=2, sticky="w", pady=(2, 0))
+                  style="Panel.Muted.TLabel").grid(row=1, column=0, columnspan=2, sticky="w", pady=(2, 0))
         rules = ttk.LabelFrame(main, text="02  Regra de renomeação", padding=4)
         rules.grid(row=2, column=0, sticky="ew", pady=(0, 8))
         rules.columnconfigure(1, weight=1)
         rules.columnconfigure(2, weight=1)
         for col, label in enumerate(("Regra", "Texto / buscar", "Substituir por")):
-            ttk.Label(rules, text=label).grid(row=0, column=col, sticky="w", pady=(0, 4))
+            ttk.Label(rules, text=label, style="Panel.TLabel").grid(row=0, column=col, sticky="w", pady=(0, 4))
         kind = ttk.Combobox(rules, textvariable=self.kind, values=list(KINDS), state="readonly", width=16)
         kind.grid(row=1, column=0, sticky="ew", padx=(0, 12))
         text = ttk.Entry(rules, textvariable=self.text)
@@ -85,7 +85,7 @@ class App:
         self.replace_entry = ttk.Entry(rules, textvariable=self.replacement, state="disabled")
         self.replace_entry.grid(row=1, column=2, sticky="ew")
         ttk.Label(rules, text="Uma regra por vez. Todas as extensões são preservadas (ex.: .tar.gz).",
-                  style="Muted.TLabel").grid(row=2, column=0, columnspan=3, sticky="w", pady=(2, 0))
+                  style="Panel.Muted.TLabel").grid(row=2, column=0, columnspan=3, sticky="w", pady=(2, 0))
         ttk.Label(main, textvariable=self.status, wraplength=930).grid(row=3, column=0, sticky="ew", pady=(0, 6))
         table = ttk.Frame(main)
         table.grid(row=4, column=0, sticky="nsew")
