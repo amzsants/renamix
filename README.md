@@ -15,8 +15,9 @@ A aparência padrão usa fundo escuro, painéis discretos e destaque vermelho na
 Pasta, regra, prévia e relatório ficam na mesma janela. O tema `clam` oferece uma base
 comum; fontes, seletores nativos e escala podem variar conforme o sistema operacional.
 
-Uma captura real da interface será adicionada após a validação visual. Não há mockup
-ou imagem simulada apresentada como captura do aplicativo.
+A interface, incluindo Dark Beach e Vampire, foi validada manualmente no Windows
+pelo autor. As capturas reais ainda não foram adicionadas. Veja as instruções e os
+nomes previstos em [docs/assets/README.md](docs/assets/README.md).
 
 ## Funcionalidades
 
@@ -42,11 +43,13 @@ padrão, use **Restaurar tema original**. Mouse e teclado funcionam nos controle
 `Ctrl+Tab` alterna entre **Renomear** e **Temas**.
 
 A mudança é imediata e preserva pasta, regra, prévia e relatório da sessão. A preferência
-é restaurada na próxima abertura e fica em um pequeno `settings.json`, fora da pasta
-de arquivos: `%APPDATA%\Renamix` no Windows, `~/Library/Application Support/Renamix`
+é restaurada na próxima abertura e fica em um pequeno `settings.json` no diretório
+de configurações do usuário: `%APPDATA%\Renamix` no Windows, `~/Library/Application Support/Renamix`
 no macOS e `${XDG_CONFIG_HOME:-~/.config}/renamix` no Linux. Configurações ausentes ou
 inválidas recuperam o tema original; se não houver permissão para salvar, o tema continua
-ativo apenas na sessão, com aviso na aba. Tudo funciona offline.
+ativo apenas na sessão, com aviso na aba. Esse caminho não é derivado da pasta escolhida
+para renomear; evite selecionar o próprio diretório de configurações como pasta de trabalho.
+Tudo funciona offline.
 
 Os temas ChatGPT e Codex são interpretações cromáticas, sem vínculo oficial com os
 produtos. Dark Beach usa apenas cores originais inspiradas em uma atmosfera noturna;
@@ -233,7 +236,9 @@ Os testes usam `tempfile` e não alteram arquivos pessoais. Cobrem as três regr
 extensões, Unicode, ignorados, conflitos, nomes inválidos, alterações após a prévia,
 falhas parciais, CSV e ausência de sobrescrita. A condição de corrida do destino é
 simulada criando o arquivo imediatamente antes da chamada nativa real.
-O teste de links é ignorado se o sistema não permitir sua criação.
+Os dois testes de links só são ignorados no Windows quando a criação retorna erro
+1314 (privilégio ausente); outros erros fazem o teste falhar. O teste de FIFO é
+exclusivo de POSIX. Ignorados não são contabilizados como aprovados.
 
 O GitHub Actions executa a suíte sem interface em Ubuntu, Windows e macOS com Python
 3.11, além de conferir sintaxe e instalação. Criar o workflow localmente não significa
