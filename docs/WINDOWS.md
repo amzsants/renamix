@@ -1,9 +1,9 @@
 # Build portátil para Windows
 
-Este trabalho prepara a distribuição da futura v0.1.1. A versão interna permanece
-0.1.0 enquanto o conteúdo da próxima release está em revisão. Antes do build final
-de release, alinhe `renamix/__init__.py`, `pyproject.toml` e README à versão aprovada,
-execute os testes e reconstrua o binário/checksum. Não altere a tag v0.1.0 existente.
+Este trabalho prepara a distribuição da **v0.1.1**, ainda não publicada. A versão
+interna, o título da janela e os metadados Python usam 0.1.1. A branch
+`codex/windows-portable` aguarda revisão antes de integrar `main`.
+Não altere a tag nem a release v0.1.0 existente.
 
 ## Construir localmente
 
@@ -30,6 +30,11 @@ PyInstaller e suas dependências são exclusivos de build, com versões fixadas 
 não usa rede. O processo usa onefile, windowed e `--noupx`, sem coletar a árvore do
 repositório como dados. Build reproduzível significa repetir o processo com os mesmos
 inputs; não se promete igualdade bit a bit entre sistemas/versões diferentes.
+O ambiente de build precisa conseguir inicializar Tcl/Tk; importar `tkinter` sozinho
+não comprova isso. Confira com `python -c "import tkinter; tkinter.Tcl()"` usando
+o mesmo interpretador do build. Nesta preparação, o isolamento do terminal bloqueou
+o acesso aos scripts Tcl; o build foi repetido fora desse isolamento, sem modificar
+o Python ou os arquivos do aplicativo.
 
 Erros capturados na inicialização são enviados ao stderr quando disponível. Sem console,
 há um diálogo Tk, com fallback para uma mensagem nativa do Windows se o próprio Tk
@@ -62,25 +67,42 @@ checksums diferentes; sempre use o checksum do mesmo artefato.
 7. Repita em Windows 10 e 11 x64 sem Python, idealmente em VM limpa. Não desinstale
    seu Python nem desative antivírus/SmartScreen para fazer esse teste.
 
-## Evidência local desta implementação
+## Evidência local da preparação v0.1.1
 
-- Windows 11, Python 3.14.7 (único interpretador instalado), PyInstaller 6.22.3,
-  hooks-contrib 2026.9, Tcl/Tk 9.0. O CI fica em Python 3.11, ainda não executado remotamente.
+- Windows 11 x64, Python 3.11.18 isolado em `build/` (distribuição
+  python-build-standalone obtida por uv, sem registro no Windows), PyInstaller
+  6.22.3, hooks-contrib 2026.9 e Tcl/Tk 8.6. O CI usa Python 3.11 de setup-python;
+  o workflow de build ainda não teve execução remota verificada nesta preparação.
 - Suíte: 67 descobertos, 64 aprovados, 3 ignorados (dois links sem privilégio Windows
   e um FIFO POSIX). Os cinco testes novos validam erros de inicialização, com diálogos
-  simulados; não abrem janelas.
+  simulados; não abrem janelas. A mesma suíte também passou em Python 3.14.7.
 - Build onefile/windowed concluído. Uma cópia do EXE iniciou de outra pasta, com PATH
-  sem Python; o processo filho expôs a janela principal com título Renamix 0.1.0.
+  sem Python; o processo filho expôs a janela principal com título Renamix 0.1.1.
   Isso é uma conferência de processo, não uma inspeção visual.
-- Tcl/Tk 9 do Python local armazena scripts em arquivos ZIP embutidos nas próprias
-  DLLs. A ausência de pastas `_tcl_data`/`_tk_data` não indica falta desses recursos
-  nesse build; os hooks do PyInstaller tratam essa forma de distribuição.
-- Um verificador descartável congelado, separado do EXE distribuído, passou com
+- O nome de saída anterior em `dist/` permaneceu bloqueado pelo Windows durante
+  as tentativas locais. O build foi concluído com o mesmo spec gerado pelo script,
+  usando `python -m PyInstaller --noconfirm --distpath build/plain011 --workpath
+  build/pyinstaller build/Renamix.spec`. A cópia final está em
+  `dist/v0.1.1/Renamix.exe`, com checksum e licença nessa mesma pasta. O workflow
+  continua usando `dist/Renamix.exe` em um checkout limpo. Nenhuma proteção foi desativada.
+- EXE local: 11.487.227 bytes; SHA-256
+  `12ed11d6786da4a48e1031c86960a0f95e0db7377d848056b98adcd42684ff6e`.
+  A inspeção confirmou a versão embutida 0.1.1, Python 3.11, recursos Tcl/Tk,
+  arquitetura x64, subsistema GUI, manifesto `asInvoker`, checksum e licença.
+- Wheel `renamix-0.1.1-py3-none-any.whl` construído sem dependências de execução;
+  sintaxe verificada em Python 3.11 e 3.14. Regras, executor, interface e temas
+  não receberam alterações nesta preparação.
+- Na etapa anterior (0.1.0, Python 3.14), um verificador descartável congelado,
+  separado do EXE distribuído, passou com
   janelas Tk ocultas: oito temas, restauração após reabrir, preferências em APPDATA
   temporário, três regras, prévia sem escrita, conflito sem sobrescrita e CSV com
   criação exclusiva. Rodou de pasta separada com PATH sem Python. Esse verificador
   e seus dados ficaram em `build/`, sem integrar o executável ou os arquivos versionados.
 
+O autor confirmou manualmente abertura, interface, renomeação com arquivos de teste,
+CSV e troca/persistência de temas no executável anterior. O novo build 0.1.1 deve
+receber uma conferência manual final com o checklist acima.
+
 Não foi testada uma máquina sem Python instalado. Também não foram homologados
-Windows 10, todas as políticas antivírus, a apresentação visual do EXE ou o build
-remoto Python 3.11. O executável local não é uma release publicada nem assinada.
+Windows 10, todas as políticas antivírus ou o build remoto Python 3.11.
+O executável local não é uma release publicada nem assinada.

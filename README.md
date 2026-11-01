@@ -7,7 +7,7 @@ O Renamix é um aplicativo desktop em Python, com interface em português brasil
 feito para tarefas locais: organizar documentos, ajustar nomes de fotos ou identificar
 uma versão final de arquivos. Funciona offline, sem contas, telemetria ou serviços externos.
 
-Versão **0.1.0** · Python **3.11+** · Licença **MIT**
+Versão **0.1.1 em preparação** · Python **3.11+** · Licença **MIT**
 
 ## Preview
 
@@ -58,7 +58,7 @@ título podem seguir o tema do sistema operacional.
 
 ## Download para Windows
 
-O processo de build portátil está preparado para a futura **v0.1.1**. A disponibilização
+O primeiro executável portátil está em preparação para a **v0.1.1**. A disponibilização
 do executável depende de aprovação e publicação posterior; esta alteração não publica
 nenhuma release nem modifica a tag v0.1.0.
 
@@ -80,6 +80,7 @@ Para verificar o SHA-256, compare com o arquivo `Renamix.exe.sha256` do mesmo bu
 
 ```powershell
 Get-FileHash .\Renamix.exe -Algorithm SHA256
+Get-Content .\Renamix.exe.sha256
 ```
 
 Isso verifica integridade, sem substituir a verificação da origem do download.
